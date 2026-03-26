@@ -4,6 +4,7 @@ import AddProduct from './components/AddProduct';
 import Order from './components/Order';
 import Customer from './components/Customer';
 import { Button, Container, Alert } from "react-bootstrap"; 
+import Dashboard from './components/Dashboard';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <AddProduct></AddProduct>
       <Order></Order>
       <Customer></Customer>
+      <Dashboard></Dashboard>
     </>
   )
 }
