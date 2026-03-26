@@ -4,21 +4,21 @@ import Layout from "./Layout";
 const AddProduct = () => {
 	const products = [
 		{
-			id: 1,
+			id: 'PROD01',
 			name: "T-Shirt",
 			image: "https://i.pinimg.com/1200x/77/33/79/773379858d28da59d36813fca43cc980.jpg", 
 			price: 100,
 			category: "Quần áo",
 		},
 		{
-			id: 2,
+			id: 'PROD02',
 			name: "Balance",
 			image: "https://i.pinimg.com/1200x/40/8c/1d/408c1d9cabb050f24cb27303efdc63e9.jpg", 
 			price: 200,
 			category: "Giày dép",
 		},
 		{
-			id: 3,
+			id: 'PROD03',
 			name: "Mắt kính",
 			image: "https://i.pinimg.com/1200x/1e/a3/54/1ea35499763efad8e5ef9a80c43a0375.jpg", 
 			price: 150,
@@ -57,9 +57,9 @@ const AddProduct = () => {
 								</tr>
 							</thead>
 							<tbody>
-								{products.map((item, index) => (
+								{products.map((item) => (
 									<tr key={item.id}>
-										<td className="text-center fw-bold">{index + 1}</td>
+										<td className="text-center fw-bold">{item.id}</td>
 										<td className="text-center">
 											{/* Hiển thị hình ảnh sản phẩm */}
 											<img
