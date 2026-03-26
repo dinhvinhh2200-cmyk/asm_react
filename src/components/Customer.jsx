@@ -1,5 +1,4 @@
 import React from "react";
-import Layout from "./Layout";
 
 const Customer = () => {
 	const customers = [
@@ -33,7 +32,7 @@ const Customer = () => {
 		},
 	];
 	return (
-		<Layout>
+		
 			<div className="container-fluid">
 				{/* Tiêu đề trang */}
 				<div className="d-flex justify-content-between align-items-center mb-4 p-2 bg-white rounded shadow-sm">
@@ -103,7 +102,7 @@ const Customer = () => {
 					</div>
 				</div>
 			</div>
-		</Layout>
+		
 	);
 };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import Layout from "./Layout";
 
 const Order = () => {
 	const orders = [
@@ -29,7 +28,7 @@ const Order = () => {
 		},
 	];
 	return (
-		<Layout>
+		
 			<div className="container-fluid">
 				{/* Tiêu đề trang quản lý đơn hàng */}
 				<div className="d-flex justify-content-between align-items-center mb-4 p-2 bg-white rounded shadow-sm">
@@ -79,7 +78,7 @@ const Order = () => {
 					</div>
 				</div>
 			</div>
-		</Layout>
+		
 	);
 };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import Layout from "./Layout";
 
 const Dashboard = () => {
 	// Dữ liệu mẫu cho 3 thẻ thống kê chính
@@ -70,7 +69,7 @@ const Dashboard = () => {
 	];
 
 	return (
-		<Layout>
+		
 			<div className="container-fluid">
 				<div className="mb-4">
 					<h3 className="fw-bold text-primary">Báo cáo hệ thống</h3>
@@ -167,7 +166,7 @@ const Dashboard = () => {
 					</div>
 				</div>
 			</div>
-		</Layout>
+		
 	);
 };
 

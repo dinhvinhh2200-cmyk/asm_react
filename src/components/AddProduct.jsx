@@ -1,5 +1,4 @@
 import React from "react";
-import Layout from "./Layout";
 
 const AddProduct = () => {
 	const products = [
@@ -26,7 +25,7 @@ const AddProduct = () => {
 		},
 	];
 	return (
-		<Layout>
+		
 			<div className="container-fluid">
 				{/* Tiêu đề và nút thêm mới */}
 				<div className="d-flex justify-content-between align-items-center mb-4 p-2 bg-white rounded shadow-sm">
@@ -101,7 +100,7 @@ const AddProduct = () => {
 					</div>
 				</div>
 			</div>
-		</Layout>
+		
 	);
 };
 
