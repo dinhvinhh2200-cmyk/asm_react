@@ -42,8 +42,8 @@
       "id": "ORD001",
       "customerName": "Nguyễn Văn A",
       "createdDate": "2026-04-09",
-      "status": "Đang vận chuyển",
-      "paymentStatus": "Chưa thanh toán",
+      "status": "Hoàn Thành",
+      "paymentStatus": "Đã thanh toán",
       "products": [
         {
           "id": "eMG602ipIAY",

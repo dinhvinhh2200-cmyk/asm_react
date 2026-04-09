@@ -6,6 +6,7 @@ import CustomerForm from "./pages/customers/CustomerForm";
 import CustomerList from "./pages/customers/CustomerList";
 import OrderList from "./pages/orders/OrderList";
 import OrderDetail from "./pages/orders/OrderDetail";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
         {/*module khách hàng*/}
         <Route path="orders" element={<OrderList />} />
         <Route path="orders/:id" element={<OrderDetail />} />
+
+        <Route path="/" element={<Dashboard></Dashboard>}></Route>
       </Route>
     </Routes>
   );
