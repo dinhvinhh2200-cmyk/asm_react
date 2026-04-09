@@ -1,0 +1,17 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Áo Sơ Mi Lụa",
+      "image": "https://picsum.photos/200",
+      "price": 350,
+      "category": "Quần áo",
+      "status": "Hoạt động"
+    }
+  ],
+  "customers": [],
+  "orders": [],
+  "users": [
+    { "id": "1", "username": "admin", "password": "123", "role": "Admin", "avatar": "" }
+  ]
+}
