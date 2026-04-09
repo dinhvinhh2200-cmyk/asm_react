@@ -2,129 +2,150 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend
+  BarChart, Bar, Cell, Legend, PieChart, Pie
 } from "recharts";
 
 const Dashboard = () => {
-  const [dataChart, setDataChart] = useState([]);
-  const [pieData, setPieData] = useState([]);
-  const [stats, setStats] = useState({ revenue: 0, orders: 0, customers: 0 });
-
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-  // Hàm bổ trợ để định dạng tiền tệ (Nhân 1000 và thêm dấu chấm)
-  const formatVND = (amount) => {
-    return (amount * 1000).toLocaleString('vi-VN') + "đ";
-  };
+  const [revenueData, setRevenueData] = useState([]);
+  const [bestSellers, setBestSellers] = useState([]);
+  const [stats, setStats] = useState({ products: 0, orders: 0, customers: 0, totalRevenue: 0 });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [resOrders, resCustomers] = await Promise.all([
+        const [resProducts, resOrders, resCustomers] = await Promise.all([
+          axios.get("http://localhost:3000/products"),
           axios.get("http://localhost:3000/orders"),
-          axios.get("http://localhost:3000/customers"),
+          axios.get("http://localhost:3000/customers")
         ]);
 
+        const products = resProducts.data;
         const orders = resOrders.data;
+        const customers = resCustomers.data;
 
-        // 1. Tính doanh thu (Lọc đơn Hoàn Thành và nhân 1000 để ra giá trị thực)
-        const totalRevenue = orders
-          .filter(o => o.status === "Hoàn Thành")
-          .reduce((sum, o) => sum + o.products.reduce((s, p) => s + (p.price * p.quantity), 0), 0);
-        
+        // 1. Tính tổng quan
+        const totalRev = orders.reduce((sum, order) => sum + order.totalPrice, 0);
         setStats({
-          revenue: totalRevenue,
+          products: products.length,
           orders: orders.length,
-          customers: resCustomers.data.length
+          customers: customers.length,
+          totalRevenue: totalRev
         });
 
-        // 2. Dữ liệu biểu đồ đường
-        const chartMapped = orders.map((o) => ({
-          name: `Đơn ${o.id}`,
-          // Ở đây giữ nguyên giá trị gốc để Recharts vẽ cột, Tooltip sẽ format sau
-          total: o.products.reduce((s, p) => s + (p.price * p.quantity), 0) * 1000 
-        }));
-        setDataChart(chartMapped);
-
-        // 3. Dữ liệu biểu đồ tròn
-        const statusCounts = {};
-        orders.forEach(o => {
-          statusCounts[o.status] = (statusCounts[o.status] || 0) + 1;
+        // 2. Xử lý dữ liệu biểu đồ doanh thu (Theo ngày/tháng)
+        const dailyRevenue = {};
+        orders.forEach(order => {
+          const date = order.orderDate; // Giả định định dạng YYYY-MM-DD
+          dailyRevenue[date] = (dailyRevenue[date] || 0) + order.totalPrice;
         });
-        const pieMapped = Object.entries(statusCounts).map(([name, value]) => ({ name, value }));
-        setPieData(pieMapped);
+
+        const formattedRevenue = Object.entries(dailyRevenue).map(([date, amount]) => ({
+          date,
+          amount
+        })).sort((a, b) => new Date(a.date) - new Date(b.date));
+        setRevenueData(formattedRevenue);
+
+        // 3. Xử lý biểu đồ sản phẩm bán chạy
+        const productSales = {};
+        orders.forEach(order => {
+          order.products.forEach(p => {
+            productSales[p.name] = (productSales[p.name] || 0) + p.quantity;
+          });
+        });
+
+        const sortedProducts = Object.entries(productSales)
+          .map(([name, sales]) => ({ name, sales }))
+          .sort((a, b) => b.sales - a.sales)
+          .slice(0, 5); // Lấy Top 5
+        setBestSellers(sortedProducts);
 
       } catch (error) {
-        console.error("Lỗi fetch data:", error);
+        console.error("Lỗi khi lấy dữ liệu thống kê:", error);
       }
     };
+
     fetchData();
   }, []);
 
-  return (
-    <div className="container-fluid p-4">
-      <h3 className="mb-4 fw-bold">THỐNG KÊ HỆ THỐNG</h3>
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
 
-      <div className="row mb-4">
-        <div className="col-md-4">
-          <div className="card bg-primary text-white shadow-sm border-0">
-            <div className="card-body">
-              <h6 className="small">TỔNG DOANH THU</h6>
-              {/* Hiển thị định dạng 250.000đ */}
-              <h3 className="fw-bold">{formatVND(stats.revenue)}</h3>
-            </div>
+  return (
+    <div className="container-fluid p-4" style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
+      <h2 className="fw-bold mb-4 text-dark">Bảng Điều Khiển Hệ Thống</h2>
+
+      {/* Thẻ thống kê nhanh */}
+      <div className="row g-4 mb-4">
+        <div className="col-md-3">
+          <div className="card border-0 shadow-sm bg-primary text-white p-3">
+            <h6>Tổng Doanh Thu</h6>
+            <h3>{stats.totalRevenue.toLocaleString()} đ</h3>
           </div>
         </div>
-        <div className="col-md-4">
-          <div className="card bg-success text-white shadow-sm border-0">
-            <div className="card-body">
-              <h6 className="small">TỔNG ĐƠN HÀNG</h6>
-              <h3 className="fw-bold">{stats.orders} đơn</h3>
-            </div>
+        <div className="col-md-3">
+          <div className="card border-0 shadow-sm bg-success text-white p-3">
+            <h6>Đơn Hàng</h6>
+            <h3>{stats.orders}</h3>
           </div>
         </div>
-        <div className="col-md-4">
-          <div className="card bg-warning text-dark shadow-sm border-0">
-            <div className="card-body">
-              <h6 className="small">KHÁCH HÀNG</h6>
-              <h3 className="fw-bold">{stats.customers} thành viên</h3>
-            </div>
+        <div className="col-md-3">
+          <div className="card border-0 shadow-sm bg-warning text-white p-3">
+            <h6>Sản Phẩm</h6>
+            <h3>{stats.products}</h3>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="card border-0 shadow-sm bg-info text-white p-3">
+            <h6>Khách Hàng</h6>
+            <h3>{stats.customers}</h3>
           </div>
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-md-8">
-          <div className="card shadow-sm p-3 border-0">
-            <h5 className="mb-4">Biểu đồ biến động doanh thu</h5>
-            <div style={{ width: "100%", height: 300 }}>
+      <div className="row g-4">
+        {/* Biểu đồ doanh thu */}
+        <div className="col-lg-8">
+          <div className="card border-0 shadow-sm p-4 h-100">
+            <h5 className="fw-bold mb-4">Thống kê doanh thu theo thời gian</h5>
+            <div style={{ width: "100%", height: 350 }}>
               <ResponsiveContainer>
-                <LineChart data={dataChart}>
+                <LineChart data={revenueData}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="name" />
-                  <YAxis tickFormatter={(value) => `${value/1000}k`} />
-                  <Tooltip formatter={(value) => [value.toLocaleString('vi-VN') + "đ", "Doanh thu"]} />
-                  <Line type="monotone" dataKey="total" stroke="#0d6efd" strokeWidth={3} dot={{ r: 6 }} />
+                  <XAxis dataKey="date" />
+                  <YAxis tickFormatter={(value) => `${value / 1000}k`} />
+                  <Tooltip formatter={(value) => value.toLocaleString() + " đ"} />
+                  <Legend />
+                  <Line 
+                    type="monotone" 
+                    dataKey="amount" 
+                    name="Doanh thu" 
+                    stroke="#0d6efd" 
+                    strokeWidth={3} 
+                    dot={{ r: 5 }} 
+                    activeDot={{ r: 8 }} 
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </div>
         </div>
 
-        <div className="col-md-4">
-          <div className="card shadow-sm p-3 border-0">
-            <h5 className="mb-4">Trạng thái đơn hàng</h5>
-            <div style={{ width: "100%", height: 300 }}>
+        {/* Biểu đồ sản phẩm bán chạy */}
+        <div className="col-lg-4">
+          <div className="card border-0 shadow-sm p-4 h-100">
+            <h5 className="fw-bold mb-4">Top 5 sản phẩm bán chạy</h5>
+            <div style={{ width: "100%", height: 350 }}>
               <ResponsiveContainer>
-                <PieChart>
-                  <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80}>
-                    {pieData.map((entry, index) => (
+                <BarChart data={bestSellers} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <XAxis type="number" />
+                  <YAxis dataKey="name" type="category" width={80} tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Bar dataKey="sales" name="Số lượng bán" fill="#198754" radius={[0, 5, 5, 0]}>
+                    {bestSellers.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
+                  </Bar>
+                </BarChart>
               </ResponsiveContainer>
             </div>
           </div>

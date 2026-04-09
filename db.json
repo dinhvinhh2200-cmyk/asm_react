@@ -69,5 +69,22 @@
       ]
     }
   ],
+
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "123",
+      "role": "Admin",
+      "avatar": "https://i.pravatar.cc/150?u=admin"
+    },
+    {
+      "id": "2",
+      "username": "employee1",
+      "password": "123",
+      "role": "Employee",
+      "avatar": "https://i.pravatar.cc/150?u=employee"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
