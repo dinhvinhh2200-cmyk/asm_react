@@ -28,7 +28,7 @@ const ProductForm = () => {
       body: JSON.stringify(data)
     });
     
-    alert(id ? "Cập nhật thành công!" : "Thêm mới thành công!"); [cite: 6, 11]
+    alert(id ? "Cập nhật thành công!" : "Thêm mới thành công!"); 
     navigate("/products");
   };
 
@@ -39,11 +39,11 @@ const ProductForm = () => {
         <div className="mb-3">
           <label className="form-label">Tên sản phẩm</label>
           <input {...register("name", { required: "Tên không được để trống", minLength: { value: 5, message: "Tên ít nhất 5 ký tự" } })} className="form-control" />
-          {errors.name && <small className="text-danger">{errors.name.message}</small>} [cite: 10]
+          {errors.name && <small className="text-danger">{errors.name.message}</small>} 
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Đường dẫn ảnh (URL)</label> [cite: 7]
+          <label className="form-label">Đường dẫn ảnh (URL)</label> 
           <input {...register("image", { required: "Vui lòng nhập URL ảnh" })} className="form-control" />
         </div>
 
@@ -53,7 +53,7 @@ const ProductForm = () => {
             <input type="number" {...register("price", { required: "Nhập giá", min: 0 })} className="form-control" />
           </div>
           <div className="col-md-6 mb-3">
-            <label className="form-label">Danh mục</label> [cite: 8]
+            <label className="form-label">Danh mục</label> 
             <select {...register("category", { required: "Chọn danh mục" })} className="form-select">
               <option value="">-- Chọn --</option>
               <option value="Quần áo">Quần áo</option>
@@ -63,7 +63,7 @@ const ProductForm = () => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label d-block">Trạng thái</label> [cite: 9]
+          <label className="form-label d-block">Trạng thái</label> 
           <div className="form-check form-check-inline">
             <input {...register("status")} className="form-check-input" type="radio" value="Hoạt động" defaultChecked />
             <label className="form-check-label">Hoạt động</label>

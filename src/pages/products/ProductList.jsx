@@ -13,7 +13,7 @@ const ProductList = () => {
   useEffect(() => { loadData(); }, []);
 
   const deleteProduct = async (id) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) { [cite: 12]
+    if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) { 
       await fetch(`http://localhost:3000/products/${id}`, { method: "DELETE" });
       loadData();
     }
@@ -36,13 +36,13 @@ const ProductList = () => {
             {products.map(p => (
               <tr key={p.id}>
                 <td>{p.id}</td>
-                <td><img src={p.image} width="50" height="50" style={{objectFit:'cover'}} className="rounded" alt="" /></td> [cite: 2]
+                <td><img src={p.image} width="50" height="50" style={{objectFit:'cover'}} className="rounded" alt="" /></td> 
                 <td>{p.name}</td>
                 <td>{p.price}.000đ</td>
                 <td><span className="badge bg-info">{p.category}</span></td>
                 <td>
                   <Link to={`/products/edit/${p.id}`} className="btn btn-sm btn-warning me-2">Sửa</Link>
-                  <button onClick={() => deleteProduct(p.id)} className="btn btn-sm btn-danger">Xóa</button> [cite: 4]
+                  <button onClick={() => deleteProduct(p.id)} className="btn btn-sm btn-danger">Xóa</button> 
                 </td>
               </tr>
             ))}
