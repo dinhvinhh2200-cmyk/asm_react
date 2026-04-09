@@ -1,0 +1,89 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
+const OrderList = () => {
+  const [orders, setOrders] = useState([]);
+
+  const loadOrders = async () => {
+    const res = await axios.get("http://localhost:3000/orders");
+    setOrders(res.data);
+  };
+
+  useEffect(() => { loadOrders(); }, []);
+
+  const handleUpdate = async (id, field, value, currentOrder) => {
+    // Kiểm tra logic: Hoàn thành thì phải Đã thanh toán [Yêu cầu 1đ]
+    if (field === "status" && value === "Hoàn Thành" && currentOrder.paymentStatus === "Chưa thanh toán") {
+      alert("Lỗi: Đơn hàng hoàn thành phải được thanh toán trước!");
+      loadOrders(); // Reset lại giao diện
+      return;
+    }
+    
+    try {
+      await axios.patch(`http://localhost:3000/orders/${id}`, { [field]: value });
+      loadOrders();
+    } catch (error) {
+      alert("Cập nhật thất bại!");
+    }
+  };
+
+  return (
+    <div className="card shadow-sm border-0">
+      <div className="card-body">
+        <h4 className="fw-bold text-primary mb-3">Quản lý đơn hàng</h4>
+        <table className="table table-hover align-middle">
+          <thead className="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Khách hàng</th>
+              <th>Ngày tạo</th>
+              <th>Trạng thái</th>
+              <th>Thanh toán</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((o) => (
+              <tr key={o.id}>
+                <td className="fw-bold">{o.id}</td>
+                <td>{o.customerName}</td>
+                <td>{o.createdDate}</td>
+                <td>
+                  <select 
+                    className="form-select form-select-sm" 
+                    value={o.status}
+                    onChange={(e) => handleUpdate(o.id, "status", e.target.value, o)}
+                  >
+                    <option value="Đang xử lý">Đang xử lý</option>
+                    <option value="Đã xử lý">Đã xử lý</option>
+                    <option value="Đang vận chuyển">Đang vận chuyển</option>
+                    <option value="Hoàn Thành">Hoàn Thành</option>
+                    <option value="Hủy đơn">Hủy đơn</option>
+                  </select>
+                </td>
+                <td>
+                  <select 
+                    className="form-select form-select-sm"
+                    value={o.paymentStatus}
+                    onChange={(e) => handleUpdate(o.id, "paymentStatus", e.target.value, o)}
+                  >
+                    <option value="Chưa thanh toán">Chưa thanh toán</option>
+                    <option value="Đã thanh toán">Đã thanh toán</option>
+                  </select>
+                </td>
+                <td>
+                  <Link to={`/orders/${o.id}`} className="btn btn-sm btn-info text-white">
+                    <i className="bi bi-eye"></i> Chi tiết
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default OrderList;

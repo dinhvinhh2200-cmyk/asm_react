@@ -4,6 +4,8 @@ import ProductList from "./pages/products/ProductList";
 import ProductForm from "./pages/products/ProductForm";
 import CustomerForm from "./pages/customers/CustomerForm";
 import CustomerList from "./pages/customers/CustomerList";
+import OrderList from "./pages/orders/OrderList";
+import OrderDetail from "./pages/orders/OrderDetail";
 
 function App() {
   return (
@@ -13,10 +15,14 @@ function App() {
         <Route path="products" element={<ProductList />} />
         <Route path="products/add" element={<ProductForm />} />
         <Route path="products/edit/:id" element={<ProductForm />} />
-        {/*module khách hàng*/ }
+        {/*module khách hàng*/}
         <Route path="customers" element={<CustomerList />} />
         <Route path="customers/add" element={<CustomerForm />} />
         <Route path="customers/edit/:id" element={<CustomerForm />} />
+
+        {/*module khách hàng*/}
+        <Route path="orders" element={<OrderList />} />
+        <Route path="orders/:id" element={<OrderDetail />} />
       </Route>
     </Routes>
   );
