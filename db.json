@@ -4,7 +4,7 @@
       "name": "Áo polo T-shirt",
       "image": "https://i.pinimg.com/736x/a1/26/78/a12678b57a128ebd6d70f0ebce487f05.jpg",
       "price": 250,
-      "category": "Quần áo",
+      "category": "Áo",
       "status": "Hoạt động",
       "id": "eMG602ipIAY"
     },
@@ -13,8 +13,40 @@
       "image": "https://i.pinimg.com/1200x/c4/84/5d/c4845d694993cb341387df71bf789a8d.jpg",
       "price": 150,
       "category": "Quần",
-      "status": "Hoạt động",
+      "status": "Không hoạt động",
       "id": "99mW8raEgws"
+    },
+    {
+      "name": "Kính râm cho nam",
+      "image": "https://i.pinimg.com/736x/c0/6e/85/c06e8503b0d8f65f1a771c408a04a023.jpg",
+      "price": 300,
+      "category": "Phụ kiện",
+      "status": "Hoạt động",
+      "id": "fTGWRqp"
+    },
+    {
+      "name": "Giày onisuktiger",
+      "image": "https://i.pinimg.com/736x/53/f9/57/53f957a256a8b252f4abe6cad10ba1dd.jpg",
+      "price": 450,
+      "category": "Giày",
+      "status": "Hoạt động",
+      "id": "J0kcAJJ"
+    },
+    {
+      "name": "Giày onisuktiger bản limited",
+      "image": "https://i.pinimg.com/736x/e4/e1/d3/e4e1d3bda15d0d9af6ede5ca4edc2162.jpg",
+      "price": 400,
+      "category": "Giày",
+      "status": "Hoạt động",
+      "id": "KeB3DWX"
+    },
+    {
+      "name": "Áo adidas in hình",
+      "image": "https://i.pinimg.com/736x/0c/c5/70/0cc570f8cb93e87f3f34f44ca4e9388d.jpg",
+      "price": 100,
+      "category": "Áo",
+      "status": "Hoạt động",
+      "id": "COQb4qK"
     }
   ],
   "customers": [
