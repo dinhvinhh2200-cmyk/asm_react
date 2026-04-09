@@ -23,16 +23,14 @@ const Login = () => {
       const user = res.data[0];
 
       if (user) {
-        // Đăng nhập thành công
         localStorage.setItem("user", JSON.stringify(user));
-        alert("Đăng nhập thành công!");
-        navigate("/"); // Chuyển hướng về trang chủ
-        window.location.reload(); // Reload để Nav cập nhật lại thông tin "Xin chào"
-      } else {
-        // Không tìm thấy user nào khớp
-        setError("loginError", {
-          message: "Tên đăng nhập hoặc mật khẩu không đúng!",
-        });
+
+        // Thêm logic kiểm tra role ở đây:
+        if (user.role === "admin") {
+          navigate("/admin/dashboard"); // Admin thì vào Dashboard
+        } else {
+          navigate("/admin/products"); // Tài khoản khác (employee) thì vào Sản phẩm luôn
+        }
       }
     } catch (error) {
       console.error(error);
