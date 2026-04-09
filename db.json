@@ -9,13 +9,24 @@
       "id": "eMG602ipIAY"
     }
   ],
-  "users": [
+  "customers": [
     {
-      "id": "1",
-      "username": "admin",
-      "password": "123",
-      "role": "Admin",
-      "avatar": ""
+      "name": "Nguyễn Văn A",
+      "birthday": "1995-06-20",
+      "phone": "0987654321",
+      "gender": "Nam",
+      "address": "Đà Nẵng",
+      "status": "Hoạt động",
+      "id": "1"
+    },
+    {
+      "name": "Nguyễn Lương Sơn",
+      "birthday": "0008-09-03",
+      "phone": "0913454674",
+      "gender": "Nam",
+      "address": "195 Đường Tú Mỡ",
+      "status": "Bị khóa",
+      "id": "7tdrAr4760Y"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
