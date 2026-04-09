@@ -69,7 +69,6 @@
       ]
     }
   ],
-
   "users": [
     {
       "id": "1",
@@ -85,6 +84,5 @@
       "role": "Employee",
       "avatar": "https://i.pravatar.cc/150?u=employee"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

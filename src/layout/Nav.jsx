@@ -13,7 +13,7 @@ const Nav = () => {
   return (
     <div className="sidebar d-flex flex-column p-3 bg-dark text-white" style={{ width: "280px", minHeight: "100vh" }}>
       <div className="d-flex align-items-center mb-3 text-white text-decoration-none">
-        <span className="fs-4 fw-bold">ASM REACT</span>
+        <span className="fs-4 fw-bold">Trang quản trị</span>
       </div>
       <hr />
       <ul className="nav nav-pills flex-column mb-auto">
