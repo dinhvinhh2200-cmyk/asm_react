@@ -1,17 +1,22 @@
 {
   "products": [
     {
-      "id": "1",
-      "name": "Áo Sơ Mi Lụa",
-      "image": "https://picsum.photos/200",
-      "price": 350,
+      "name": "Áo polo T-shirt",
+      "image": "https://i.pinimg.com/736x/a1/26/78/a12678b57a128ebd6d70f0ebce487f05.jpg",
+      "price": 250,
       "category": "Quần áo",
-      "status": "Hoạt động"
+      "status": "Hoạt động",
+      "id": "eMG602ipIAY"
     }
   ],
-  "customers": [],
-  "orders": [],
   "users": [
-    { "id": "1", "username": "admin", "password": "123", "role": "Admin", "avatar": "" }
-  ]
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "123",
+      "role": "Admin",
+      "avatar": ""
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
