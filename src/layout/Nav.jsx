@@ -35,16 +35,7 @@ const Nav = () => {
         </li>
       </ul>
       <hr />
-      <div className="d-flex flex-column align-items-start">
-        <div className="d-flex align-items-center mb-3">
-          <img src={user?.avatar} alt="avatar" width="32" height="32" className="rounded-circle me-2" />
-          <div className="small">
-            <div>Xin chào,</div>
-            <strong className="d-block text-truncate" style={{maxWidth: "150px"}}>{user?.username}</strong>
-          </div>
-        </div>
-        <button onClick={handleLogout} className="btn btn-outline-danger btn-sm w-100">Đăng xuất</button>
-      </div>
+      
     </div>
   );
 };

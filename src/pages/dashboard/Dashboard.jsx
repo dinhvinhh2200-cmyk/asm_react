@@ -8,6 +8,7 @@ import {
 const Dashboard = () => {
   const [revenueData, setRevenueData] = useState([]);
   const [bestSellers, setBestSellers] = useState([]);
+  // stats.products bây giờ sẽ đại diện cho tổng số lượng sản phẩm đã bán
   const [stats, setStats] = useState({ products: 0, orders: 0, customers: 0, totalRevenue: 0 });
 
   useEffect(() => {
@@ -19,18 +20,27 @@ const Dashboard = () => {
           axios.get("http://localhost:3000/customers")
         ]);
 
-        const products = resProducts.data;
         const orders = resOrders.data;
         const customers = resCustomers.data;
 
-        // 1. Tính tổng quan (Nhân 1000 để đổi từ đơn vị k sang đồng)
+        // 1. Tính tổng doanh thu và Tổng số lượng sản phẩm đã bán
+        let totalSoldQuantity = 0;
         const totalRev = orders.reduce((sum, order) => {
+          // Tính tiền của đơn hàng (nhân 1000 như yêu cầu trước đó của bạn)
           const orderPrice = order.price || order.products.reduce((pSum, p) => pSum + (p.price * p.quantity), 0);
-          return sum + (orderPrice * 1000); // Nhân 1000 ở đây
+          
+          // Cộng dồn số lượng sản phẩm trong đơn hàng này vào tổng sold
+          if (order.products) {
+            order.products.forEach(p => {
+              totalSoldQuantity += p.quantity; 
+            });
+          }
+          
+          return sum + (orderPrice * 1000);
         }, 0);
 
         setStats({
-          products: products.length,
+          products: totalSoldQuantity, // Bây giờ sẽ hiển thị là 3 nếu có 2 đơn hàng (1 đơn 2 SP, 1 đơn 1 SP)
           orders: orders.length,
           customers: customers.length,
           totalRevenue: totalRev
@@ -41,7 +51,6 @@ const Dashboard = () => {
         orders.forEach(order => {
           const date = order.createdDate || "Không xác định"; 
           const orderPrice = order.price || order.products.reduce((pSum, p) => pSum + (p.price * p.quantity), 0);
-          // Nhân 1000 để dữ liệu biểu đồ khớp với thực tế
           dailyRevenue[date] = (dailyRevenue[date] || 0) + (orderPrice * 1000);
         });
 
@@ -51,7 +60,7 @@ const Dashboard = () => {
         })).sort((a, b) => new Date(a.date) - new Date(b.date));
         setRevenueData(formattedRevenue);
 
-        // 3. Xử lý sản phẩm bán chạy (Giữ nguyên vì đây là số lượng)
+        // 3. Xử lý sản phẩm bán chạy
         const productSales = {};
         orders.forEach(order => {
           if (order.products) {
@@ -81,7 +90,6 @@ const Dashboard = () => {
     <div className="container-fluid p-4" style={{ backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
       <h2 className="fw-bold mb-4 text-dark">Bảng Điều Khiển Hệ Thống</h2>
 
-      {/* Thẻ thống kê nhanh */}
       <div className="row g-4 mb-4">
         <div className="col-md-3">
           <div className="card border-0 shadow-sm bg-primary text-white p-3">
@@ -97,7 +105,7 @@ const Dashboard = () => {
         </div>
         <div className="col-md-3">
           <div className="card border-0 shadow-sm bg-warning text-white p-3">
-            <h6>Sản Phẩm</h6>
+            <h6>Sản Phẩm Đã Bán</h6> {/* Đổi tiêu đề cho rõ nghĩa */}
             <h3>{stats.products}</h3>
           </div>
         </div>
@@ -108,9 +116,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-
+      {/* ... giữ nguyên phần biểu đồ bên dưới ... */}
       <div className="row g-4">
-        {/* Biểu đồ doanh thu */}
         <div className="col-lg-8">
           <div className="card border-0 shadow-sm p-4 h-100">
             <h5 className="fw-bold mb-4">Thống kê doanh thu theo thời gian</h5>
@@ -122,22 +129,12 @@ const Dashboard = () => {
                   <YAxis tickFormatter={(value) => value.toLocaleString('vi-VN')} />
                   <Tooltip formatter={(value) => value.toLocaleString('vi-VN') + " đ"} />
                   <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="amount" 
-                    name="Doanh thu" 
-                    stroke="#0d6efd" 
-                    strokeWidth={3} 
-                    dot={{ r: 5 }} 
-                    activeDot={{ r: 8 }} 
-                  />
+                  <Line type="monotone" dataKey="amount" name="Doanh thu" stroke="#0d6efd" strokeWidth={3} dot={{ r: 5 }} activeDot={{ r: 8 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </div>
         </div>
-
-        {/* Biểu đồ sản phẩm bán chạy */}
         <div className="col-lg-4">
           <div className="card border-0 shadow-sm p-4 h-100">
             <h5 className="fw-bold mb-4">Top 5 sản phẩm bán chạy</h5>
