@@ -8,7 +8,6 @@ import {
 const Dashboard = () => {
   const [revenueData, setRevenueData] = useState([]);
   const [bestSellers, setBestSellers] = useState([]);
-  // stats.products bây giờ sẽ đại diện cho tổng số lượng sản phẩm đã bán
   const [stats, setStats] = useState({ products: 0, orders: 0, customers: 0, totalRevenue: 0 });
 
   useEffect(() => {
@@ -23,35 +22,42 @@ const Dashboard = () => {
         const orders = resOrders.data;
         const customers = resCustomers.data;
 
-        // 1. Tính tổng doanh thu và Tổng số lượng sản phẩm đã bán
+        // === QUAN TRỌNG: Lọc bỏ đơn hàng có trạng thái "Hủy đơn" ===
+        const validOrders = orders.filter(order => order.status !== "Hủy đơn");
+        
+        // Chỉ tính doanh thu từ đơn hàng hợp lệ (không hủy) VÀ đã thanh toán
+        const paidOrders = validOrders.filter(order => order.paymentStatus === "Đã thanh toán");
+        
+        // 1. Tính tổng doanh thu và tổng số lượng sản phẩm đã bán
         let totalSoldQuantity = 0;
-        const totalRev = orders.reduce((sum, order) => {
-          // Tính tiền của đơn hàng (KHÔNG nhân với 1000 nữa vì dữ liệu đã đúng)
+        let totalRev = 0;
+        
+        paidOrders.forEach(order => {
+          // Tính tiền của đơn hàng
           const orderPrice = order.price || order.products.reduce((pSum, p) => pSum + (p.price * p.quantity), 0);
+          totalRev += orderPrice;
           
-          // Cộng dồn số lượng sản phẩm trong đơn hàng này vào tổng sold
+          // Cộng dồn số lượng sản phẩm trong đơn hàng đã thanh toán
           if (order.products) {
             order.products.forEach(p => {
-              totalSoldQuantity += p.quantity; 
+              totalSoldQuantity += p.quantity;
             });
           }
-          
-          return sum + orderPrice; // Bỏ * 1000
-        }, 0);
+        });
 
         setStats({
           products: totalSoldQuantity,
-          orders: orders.length,
+          orders: validOrders.length,  // CHỈ ĐẾM ĐƠN HÀNG KHÔNG BỊ HỦY
           customers: customers.length,
           totalRevenue: totalRev
         });
 
-        // 2. Biểu đồ doanh thu
+        // 2. Biểu đồ doanh thu (chỉ từ đơn hàng hợp lệ và đã thanh toán)
         const dailyRevenue = {};
-        orders.forEach(order => {
+        paidOrders.forEach(order => {
           const date = order.createdDate || "Không xác định"; 
           const orderPrice = order.price || order.products.reduce((pSum, p) => pSum + (p.price * p.quantity), 0);
-          dailyRevenue[date] = (dailyRevenue[date] || 0) + orderPrice; // Bỏ * 1000
+          dailyRevenue[date] = (dailyRevenue[date] || 0) + orderPrice;
         });
 
         const formattedRevenue = Object.entries(dailyRevenue).map(([date, amount]) => ({
@@ -60,9 +66,9 @@ const Dashboard = () => {
         })).sort((a, b) => new Date(a.date) - new Date(b.date));
         setRevenueData(formattedRevenue);
 
-        // 3. Xử lý sản phẩm bán chạy
+        // 3. Xử lý sản phẩm bán chạy (chỉ từ đơn hàng hợp lệ và đã thanh toán)
         const productSales = {};
-        orders.forEach(order => {
+        paidOrders.forEach(order => {
           if (order.products) {
             order.products.forEach(p => {
               productSales[p.name] = (productSales[p.name] || 0) + p.quantity;
@@ -140,10 +146,10 @@ const Dashboard = () => {
             <h5 className="fw-bold mb-4">Top 5 sản phẩm bán chạy</h5>
             <div style={{ width: "100%", height: 350 }}>
               <ResponsiveContainer>
-                <BarChart data={bestSellers} layout="horizontal"> {/* Đổi layout thành horizontal */}
+                <BarChart data={bestSellers} layout="horizontal">
                   <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="name" type="category" tick={{ fontSize: 12, angle: -15, textAnchor: "end", height: 60 }} /> {/* XAxis cho tên sản phẩm */}
-                  <YAxis type="number" /> {/* YAxis cho số lượng */}
+                  <XAxis dataKey="name" type="category" tick={{ fontSize: 12, angle: -15, textAnchor: "end", height: 60 }} />
+                  <YAxis type="number" />
                   <Tooltip formatter={(value) => `${value} sản phẩm`} />
                   <Bar dataKey="sales" name="Số lượng bán" fill="#198754" radius={[5, 5, 0, 0]}>
                     {bestSellers.map((entry, index) => (

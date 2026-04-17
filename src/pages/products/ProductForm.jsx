@@ -1,18 +1,36 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
-import axios from "axios"; //
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const ProductForm = () => {
-  const { id } = useParams(); //
-  const navigate = useNavigate(); //
-  const { register, handleSubmit, setValue, setError, formState: { errors } } = useForm(); //
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { register, handleSubmit, setValue, setError, watch, formState: { errors } } = useForm();
+  
+  // State để lưu URL ảnh preview
+  const [imagePreview, setImagePreview] = useState("");
+  
+  // Theo dõi giá trị của ô input image
+  const watchImage = watch("image");
+
+  // Cập nhật preview khi giá trị image thay đổi
+  useEffect(() => {
+    if (watchImage) {
+      setImagePreview(watchImage);
+    }
+  }, [watchImage]);
 
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:3000/products/${id}`) //
+      axios.get(`http://localhost:3000/products/${id}`)
         .then(res => {
-          Object.keys(res.data).forEach(key => setValue(key, res.data[key])); //
+          // Gán dữ liệu vào form
+          Object.keys(res.data).forEach(key => setValue(key, res.data[key]));
+          // Set ảnh preview từ dữ liệu cũ
+          if (res.data.image) {
+            setImagePreview(res.data.image);
+          }
         })
         .catch(err => console.error("Lỗi tải chi tiết:", err));
     }
@@ -20,38 +38,33 @@ const ProductForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      // 1. Lấy danh sách tất cả sản phẩm để kiểm tra trùng tên
       const response = await axios.get("http://localhost:3000/products");
       const allProducts = response.data;
 
-      // 2. Kiểm tra trùng tên (không phân biệt hoa thường)
-      // Nếu đang sửa (id tồn tại), loại trừ sản phẩm hiện tại ra khỏi danh sách kiểm tra
       const isDuplicate = allProducts.some(p => 
         p.name.toLowerCase().trim() === data.name.toLowerCase().trim() && p.id != id
       );
 
       if (isDuplicate) {
-        // Hiển thị lỗi ngay tại ô nhập tên sản phẩm
         setError("name", { type: "manual", message: "Tên sản phẩm này đã tồn tại!" });
         return;
       }
 
-      // 3. Xử lý dữ liệu chuẩn
       const { id: _, ...restData } = data;
       const formattedData = {
         ...restData,
-        price: Number(data.price), //
-        name: data.name.trim() // Xóa khoảng trắng thừa
+        price: Number(data.price),
+        name: data.name.trim()
       };
 
       if (id) {
-        await axios.put(`http://localhost:3000/products/${id}`, formattedData); //
+        await axios.put(`http://localhost:3000/products/${id}`, formattedData);
       } else {
-        await axios.post("http://localhost:3000/products", formattedData); //
+        await axios.post("http://localhost:3000/products", formattedData);
       }
       
-      alert(id ? "Cập nhật thành công!" : "Thêm mới thành công!"); //
-      navigate("/products"); //
+      alert(id ? "Cập nhật thành công!" : "Thêm mới thành công!");
+      navigate("/products");
     } catch (error) {
       alert("Có lỗi xảy ra, vui lòng thử lại!");
     }
@@ -77,10 +90,32 @@ const ProductForm = () => {
           <label className="form-label">Đường dẫn ảnh (URL)</label> 
           <input 
             {...register("image", { required: "Vui lòng nhập URL ảnh" })} 
-            className={`form-control ${errors.image ? 'is-invalid' : ''}`} // Thêm is-invalid
+            className={`form-control ${errors.image ? 'is-invalid' : ''}`}
           />
-          {/* HIỂN THỊ LỖI ẢNH */}
           {errors.image && <small className="text-danger">{errors.image.message}</small>}
+          
+          {/* HIỂN THỊ ẢNH PREVIEW */}
+          {imagePreview && (
+            <div className="mt-2">
+              <small className="text-muted d-block mb-2">Ảnh preview:</small>
+              <img 
+                src={imagePreview} 
+                alt="Preview" 
+                style={{ 
+                  maxWidth: '150px', 
+                  maxHeight: '150px', 
+                  objectFit: 'cover',
+                  border: '1px solid #ddd',
+                  borderRadius: '8px',
+                  padding: '4px'
+                }} 
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/150?text=Invalid+URL';
+                  e.target.onerror = null;
+                }}
+              />
+            </div>
+          )}
         </div>
 
         <div className="row">
@@ -89,16 +124,15 @@ const ProductForm = () => {
             <input 
                 type="number" 
                 {...register("price", { required: "Nhập giá", min: { value: 0, message: "Giá không được âm" } })} 
-                className={`form-control ${errors.price ? 'is-invalid' : ''}`} // Thêm is-invalid
+                className={`form-control ${errors.price ? 'is-invalid' : ''}`}
             />
-            {/* HIỂN THỊ LỖI GIÁ */}
             {errors.price && <small className="text-danger">{errors.price.message}</small>}
           </div>
           <div className="col-md-6 mb-3">
             <label className="form-label">Danh mục</label> 
             <select 
                 {...register("category", { required: "Chọn danh mục" })} 
-                className={`form-select ${errors.category ? 'is-invalid' : ''}`} // Thêm is-invalid
+                className={`form-select ${errors.category ? 'is-invalid' : ''}`}
             >
               <option value="">-- Chọn --</option>
               <option value="Áo">Áo</option>
@@ -106,7 +140,6 @@ const ProductForm = () => {
               <option value="Giày">Giày</option>
               <option value="Phụ kiện">Phụ kiện</option>
             </select>
-            {/* HIỂN THỊ LỖI DANH MỤC */}
             {errors.category && <small className="text-danger">{errors.category.message}</small>}
           </div>
         </div>
@@ -129,4 +162,5 @@ const ProductForm = () => {
     </div>
   );
 };
+
 export default ProductForm;

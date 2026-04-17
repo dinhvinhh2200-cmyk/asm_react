@@ -19,10 +19,24 @@ const OrderList = () => {
   };
 
   const handleUpdate = async (id, field, value, currentOrder) => {
-    // Kiểm tra logic: Hoàn thành thì phải Đã thanh toán [Yêu cầu 1đ]
+    // Logic 1: Hoàn thành thì phải Đã thanh toán
     if (field === "status" && value === "Hoàn Thành" && currentOrder.paymentStatus === "Chưa thanh toán") {
       alert("Lỗi: Đơn hàng hoàn thành phải được thanh toán trước!");
-      loadOrders(); // Reset lại giao diện
+      loadOrders();
+      return;
+    }
+    
+    // Logic 2: Nếu đã thanh toán thì không thể hủy đơn
+    if (field === "status" && value === "Hủy đơn" && currentOrder.paymentStatus === "Đã thanh toán") {
+      alert("Lỗi: Đơn hàng đã thanh toán không thể hủy!");
+      loadOrders();
+      return;
+    }
+
+    // Logic 3: Nếu đã hủy đơn thì không thể chuyển thành đã thanh toán
+    if (field === "paymentStatus" && value === "Đã thanh toán" && currentOrder.status === "Hủy đơn") {
+      alert("Lỗi: Đơn hàng đã hủy không thể thanh toán!");
+      loadOrders();
       return;
     }
     

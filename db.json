@@ -39,6 +39,14 @@
       "category": "Áo",
       "status": "Hoạt động",
       "id": "COQb4qK"
+    },
+    {
+      "name": "Giày nhật bản phong cách học sinh",
+      "image": "https://i.pinimg.com/736x/16/e0/b1/16e0b11113b273dc6239269c9b42d237.jpg",
+      "price": 200000,
+      "category": "Giày",
+      "status": "Hoạt động",
+      "id": "OimZnV5"
     }
   ],
   "customers": [
@@ -89,7 +97,7 @@
       "customerName": "Nguyễn Lương Sơn",
       "createdDate": "2026-04-08",
       "totalPrice": 500000,
-      "status": "Đang xử lý",
+      "status": "Đang vận chuyển",
       "paymentStatus": "Đã thanh toán",
       "products": [
         {
@@ -105,8 +113,8 @@
       "customerName": "Nguyễn Thị Di",
       "createdDate": "2026-04-17",
       "totalPrice": 600000,
-      "status": "Hủy đơn",
-      "paymentStatus": "Đã thanh toán",
+      "status": "Đang vận chuyển",
+      "paymentStatus": "Chưa thanh toán",
       "products": [
         {
           "id": "COQb4qK",
