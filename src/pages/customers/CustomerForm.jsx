@@ -63,6 +63,8 @@ const CustomerForm = () => {
               {...register("birthday", { required: "Vui lòng chọn ngày sinh" })} 
               className={`form-control ${errors.birthday ? 'is-invalid' : ''}`}
             />
+            {/* THÊM HIỂN THỊ LỖI NGÀY SINH */}
+            {errors.birthday && <small className="text-danger">{errors.birthday.message}</small>}
           </div>
         </div>
 
@@ -80,31 +82,35 @@ const CustomerForm = () => {
           </div>
 
           <div className="col-md-6 mb-3">
-            <label className="form-label">Giới tính</label>
-            <select {...register("gender", { required: "Chọn giới tính" })} className="form-select">
-              <option value="">-- Chọn giới tính --</option>
-              <option value="Nam">Nam</option>
-              <option value="Nữ">Nữ</option>
-              <option value="Khác">Khác</option>
-            </select>
+            <label className="form-label d-block">Giới tính</label>
+            <div className={`p-2 border rounded ${errors.gender ? 'border-danger' : ''}`}>
+               {/* Bao bọc radio để dễ nhận diện vùng lỗi */}
+              <div className="form-check form-check-inline">
+                <input {...register("gender", { required: "Vui lòng chọn giới tính" })} className="form-check-input" type="radio" value="Nam" id="genderNam" />
+                <label className="form-check-label" htmlFor="genderNam">Nam</label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input {...register("gender", { required: "Vui lòng chọn giới tính" })} className="form-check-input" type="radio" value="Nữ" id="genderNu" />
+                <label className="form-check-label" htmlFor="genderNu">Nữ</label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input {...register("gender", { required: "Vui lòng chọn giới tính" })} className="form-check-input" type="radio" value="Khác" id="genderKhac" />
+                <label className="form-check-label" htmlFor="genderKhac">Khác</label>
+              </div>
+            </div>
+            {errors.gender && <small className="text-danger d-block">{errors.gender.message}</small>}
           </div>
         </div>
 
         <div className="mb-3">
           <label className="form-label">Địa chỉ</label>
-          <textarea {...register("address", { required: "Nhập địa chỉ" })} className="form-control" rows="2"></textarea>
-        </div>
-
-        <div className="mb-4">
-          <label className="form-label d-block">Trạng thái</label>
-          <div className="form-check form-check-inline">
-            <input {...register("status")} className="form-check-input" type="radio" value="Hoạt động" defaultChecked />
-            <label className="form-check-label">Hoạt động</label>
-          </div>
-          <div className="form-check form-check-inline">
-            <input {...register("status")} className="form-check-input" type="radio" value="Bị khóa" />
-            <label className="form-check-label">Bị khóa</label>
-          </div>
+          <textarea 
+            {...register("address", { required: "Nhập địa chỉ" })} 
+            className={`form-control ${errors.address ? 'is-invalid' : ''}`} // THÊM class is-invalid
+            rows="2"
+          ></textarea>
+          {/* THÊM HIỂN THỊ LỖI ĐỊA CHỈ */}
+          {errors.address && <small className="text-danger">{errors.address.message}</small>}
         </div>
 
         <button type="submit" className="btn btn-primary px-4">Lưu dữ liệu</button>

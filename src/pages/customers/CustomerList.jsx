@@ -44,28 +44,18 @@ const CustomerList = () => {
               <th>Số điện thoại</th>
               <th>Địa chỉ</th>
               <th>Giới tính</th>
-              <th>Trạng thái</th>
               <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
             {customers.map((c, index) => (
-              // BƯỚC CẬP NHẬT CHÍNH Ở ĐÂY:
-              // Sử dụng toán tử điều kiện (ternary) để thêm class 'text-muted' và 'opacity-50' 
-              // của Bootstrap nếu khách hàng bị khóa.
-              <tr key={c.id} className={c.status === "Bị khóa" ? "text-muted opacity-50" : ""}>
+              <tr key={c.id}>
                 <td>{index + 1}</td>
-                {/* Bạn cũng có thể thêm class vào các ô cụ thể nếu muốn */}
-                <td className={`fw-bold ${c.status === "Bị khóa" ? "" : "text-dark"}`}>{c.name}</td>
+                <td className="fw-bold text-dark">{c.name}</td>
                 <td>{c.birthday}</td>
                 <td>{c.phone}</td>
                 <td>{c.address}</td>
                 <td>{c.gender}</td>
-                <td>
-                  <span className={`badge ${c.status === "Hoạt động" ? "bg-success" : "bg-secondary"}`}>
-                    {c.status}
-                  </span>
-                </td>
                 <td>
                   <Link to={`/customers/edit/${c.id}`} className="btn btn-sm btn-warning me-2">Sửa</Link>
                   <button onClick={() => deleteCustomer(c.id)} className="btn btn-sm btn-danger">Xóa</button>

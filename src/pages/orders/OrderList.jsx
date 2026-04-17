@@ -12,6 +12,12 @@ const OrderList = () => {
 
   useEffect(() => { loadOrders(); }, []);
 
+  // Hàm tính tổng tiền của đơn hàng
+  const calculateTotal = (products) => {
+    if (!products || products.length === 0) return 0;
+    return products.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
   const handleUpdate = async (id, field, value, currentOrder) => {
     // Kiểm tra logic: Hoàn thành thì phải Đã thanh toán [Yêu cầu 1đ]
     if (field === "status" && value === "Hoàn Thành" && currentOrder.paymentStatus === "Chưa thanh toán") {
@@ -38,6 +44,7 @@ const OrderList = () => {
               <th>ID</th>
               <th>Khách hàng</th>
               <th>Ngày tạo</th>
+              <th>Tổng tiền</th>
               <th>Trạng thái</th>
               <th>Thanh toán</th>
               <th>Hành động</th>
@@ -49,6 +56,9 @@ const OrderList = () => {
                 <td className="fw-bold">{o.id}</td>
                 <td>{o.customerName}</td>
                 <td>{o.createdDate}</td>
+                <td className="text-success fw-bold">
+                  {calculateTotal(o.products).toLocaleString('vi-VN')} đ
+                </td>
                 <td>
                   <select 
                     className="form-select form-select-sm" 

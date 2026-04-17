@@ -3,7 +3,7 @@
     {
       "name": "Áo polo T-shirt",
       "image": "https://i.pinimg.com/736x/a1/26/78/a12678b57a128ebd6d70f0ebce487f05.jpg",
-      "price": 250,
+      "price": 250000,
       "category": "Áo",
       "status": "Hoạt động",
       "id": "eMG602ipIAY"
@@ -11,7 +11,7 @@
     {
       "name": "Quần jean ngắn",
       "image": "https://i.pinimg.com/1200x/c4/84/5d/c4845d694993cb341387df71bf789a8d.jpg",
-      "price": 150,
+      "price": 150000,
       "category": "Quần",
       "status": "Không hoạt động",
       "id": "99mW8raEgws"
@@ -19,31 +19,23 @@
     {
       "name": "Kính râm cho nam",
       "image": "https://i.pinimg.com/736x/c0/6e/85/c06e8503b0d8f65f1a771c408a04a023.jpg",
-      "price": 300,
-      "category": "Phụ kiện",
+      "price": 300000,
+      "category": "Quần",
       "status": "Hoạt động",
       "id": "fTGWRqp"
     },
     {
       "name": "Giày onisuktiger",
       "image": "https://i.pinimg.com/736x/53/f9/57/53f957a256a8b252f4abe6cad10ba1dd.jpg",
-      "price": 450,
+      "price": 450000,
       "category": "Giày",
       "status": "Hoạt động",
       "id": "J0kcAJJ"
     },
     {
-      "name": "Giày onisuktiger bản limited",
-      "image": "https://i.pinimg.com/736x/e4/e1/d3/e4e1d3bda15d0d9af6ede5ca4edc2162.jpg",
-      "price": 400,
-      "category": "Giày",
-      "status": "Hoạt động",
-      "id": "KeB3DWX"
-    },
-    {
       "name": "Áo adidas in hình",
       "image": "https://i.pinimg.com/736x/0c/c5/70/0cc570f8cb93e87f3f34f44ca4e9388d.jpg",
-      "price": 100,
+      "price": 100000,
       "category": "Áo",
       "status": "Hoạt động",
       "id": "COQb4qK"
@@ -56,17 +48,23 @@
       "phone": "0987654321",
       "gender": "Nam",
       "address": "Đà Nẵng",
-      "status": "Hoạt động",
       "id": "1"
     },
     {
       "name": "Nguyễn Lương Sơn",
-      "birthday": "0008-09-03",
+      "birthday": "2001-09-03",
       "phone": "0913454674",
       "gender": "Nam",
       "address": "195 Đường Tú Mỡ",
-      "status": "Bị khóa",
       "id": "7tdrAr4760Y"
+    },
+    {
+      "name": "Nguyễn Thị Di",
+      "birthday": "2000-06-23",
+      "phone": "0987667147",
+      "gender": "Nữ",
+      "address": "Tp Huế",
+      "id": "paRPl1V"
     }
   ],
   "orders": [
@@ -74,13 +72,14 @@
       "id": "ORD001",
       "customerName": "Nguyễn Văn A",
       "createdDate": "2026-04-09",
-      "status": "Hoàn Thành",
+      "totalPrice": 500000,
+      "status": "Đang vận chuyển",
       "paymentStatus": "Đã thanh toán",
       "products": [
         {
           "id": "eMG602ipIAY",
           "name": "Áo polo T-shirt",
-          "price": 250,
+          "price": 250000,
           "quantity": 2
         }
       ]
@@ -89,14 +88,31 @@
       "id": "ORD002",
       "customerName": "Nguyễn Lương Sơn",
       "createdDate": "2026-04-08",
-      "status": "Hoàn Thành",
+      "totalPrice": 500000,
+      "status": "Đang xử lý",
       "paymentStatus": "Đã thanh toán",
       "products": [
         {
           "id": "eMG602ipIAY",
           "name": "Áo polo T-shirt",
-          "price": 250,
-          "quantity": 1
+          "price": 250000,
+          "quantity": 2
+        }
+      ]
+    },
+    {
+      "id": "ORD003",
+      "customerName": "Nguyễn Thị Di",
+      "createdDate": "2026-04-17",
+      "totalPrice": 600000,
+      "status": "Hủy đơn",
+      "paymentStatus": "Đã thanh toán",
+      "products": [
+        {
+          "id": "COQb4qK",
+          "name": "Áo adidas in hình",
+          "price": 100000,
+          "quantity": 6
         }
       ]
     }

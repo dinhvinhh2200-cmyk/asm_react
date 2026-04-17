@@ -48,15 +48,15 @@ const OrderDetail = () => {
             <tr key={idx}>
               <td>{p.name}</td>
               <td className="text-center">{p.quantity}</td>
-              <td className="text-end">{p.price.toLocaleString()}.000đ</td>
-              <td className="text-end">{(p.price * p.quantity).toLocaleString()}.000đ</td>
+              <td className="text-end">{p.price.toLocaleString('vi-VN')} đ</td>
+              <td className="text-end">{(p.price * p.quantity).toLocaleString('vi-VN')} đ</td>
             </tr>
           ))}
         </tbody>
         <tfoot>
           <tr>
             <td colSpan="3" className="text-end fw-bold">Tổng cộng:</td>
-            <td className="text-end fw-bold text-danger">{totalAmount.toLocaleString()}.000đ</td>
+            <td className="text-end fw-bold text-danger">{totalAmount.toLocaleString('vi-VN')} đ</td>
           </tr>
         </tfoot>
       </table>

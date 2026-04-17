@@ -26,7 +26,7 @@ const Dashboard = () => {
         // 1. Tính tổng doanh thu và Tổng số lượng sản phẩm đã bán
         let totalSoldQuantity = 0;
         const totalRev = orders.reduce((sum, order) => {
-          // Tính tiền của đơn hàng (nhân 1000 như yêu cầu trước đó của bạn)
+          // Tính tiền của đơn hàng (KHÔNG nhân với 1000 nữa vì dữ liệu đã đúng)
           const orderPrice = order.price || order.products.reduce((pSum, p) => pSum + (p.price * p.quantity), 0);
           
           // Cộng dồn số lượng sản phẩm trong đơn hàng này vào tổng sold
@@ -36,11 +36,11 @@ const Dashboard = () => {
             });
           }
           
-          return sum + (orderPrice * 1000);
+          return sum + orderPrice; // Bỏ * 1000
         }, 0);
 
         setStats({
-          products: totalSoldQuantity, // Bây giờ sẽ hiển thị là 3 nếu có 2 đơn hàng (1 đơn 2 SP, 1 đơn 1 SP)
+          products: totalSoldQuantity,
           orders: orders.length,
           customers: customers.length,
           totalRevenue: totalRev
@@ -51,7 +51,7 @@ const Dashboard = () => {
         orders.forEach(order => {
           const date = order.createdDate || "Không xác định"; 
           const orderPrice = order.price || order.products.reduce((pSum, p) => pSum + (p.price * p.quantity), 0);
-          dailyRevenue[date] = (dailyRevenue[date] || 0) + (orderPrice * 1000);
+          dailyRevenue[date] = (dailyRevenue[date] || 0) + orderPrice; // Bỏ * 1000
         });
 
         const formattedRevenue = Object.entries(dailyRevenue).map(([date, amount]) => ({
@@ -105,7 +105,7 @@ const Dashboard = () => {
         </div>
         <div className="col-md-3">
           <div className="card border-0 shadow-sm bg-warning text-white p-3">
-            <h6>Sản Phẩm Đã Bán</h6> {/* Đổi tiêu đề cho rõ nghĩa */}
+            <h6>Sản Phẩm Đã Bán</h6>
             <h3>{stats.products}</h3>
           </div>
         </div>
@@ -116,7 +116,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      {/* ... giữ nguyên phần biểu đồ bên dưới ... */}
+      
       <div className="row g-4">
         <div className="col-lg-8">
           <div className="card border-0 shadow-sm p-4 h-100">
@@ -140,12 +140,12 @@ const Dashboard = () => {
             <h5 className="fw-bold mb-4">Top 5 sản phẩm bán chạy</h5>
             <div style={{ width: "100%", height: 350 }}>
               <ResponsiveContainer>
-                <BarChart data={bestSellers} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                  <XAxis type="number" />
-                  <YAxis dataKey="name" type="category" width={80} tick={{ fontSize: 12 }} />
-                  <Tooltip />
-                  <Bar dataKey="sales" name="Số lượng bán" fill="#198754" radius={[0, 5, 5, 0]}>
+                <BarChart data={bestSellers} layout="horizontal"> {/* Đổi layout thành horizontal */}
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="name" type="category" tick={{ fontSize: 12, angle: -15, textAnchor: "end", height: 60 }} /> {/* XAxis cho tên sản phẩm */}
+                  <YAxis type="number" /> {/* YAxis cho số lượng */}
+                  <Tooltip formatter={(value) => `${value} sản phẩm`} />
+                  <Bar dataKey="sales" name="Số lượng bán" fill="#198754" radius={[5, 5, 0, 0]}>
                     {bestSellers.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}

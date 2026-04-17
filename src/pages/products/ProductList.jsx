@@ -113,7 +113,7 @@ const ProductList = () => {
                       <img src={p.image} width="50" height="50" style={{ objectFit: 'cover' }} className="rounded" alt="" />
                     </td>
                     <td>{p.name}</td>
-                    <td>{Number(p.price).toLocaleString()}.000đ</td>
+                    <td>{Number(p.price).toLocaleString('vi-VN')}đ</td>
                     <td><span className="badge bg-info text-dark">{p.category}</span></td>
                     <td className="text-center">
                       <span className={`badge ${isDisabled ? 'bg-secondary' : 'bg-success'}`}>

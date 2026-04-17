@@ -68,46 +68,62 @@ const ProductForm = () => {
               required: "Tên không được để trống", 
               minLength: { value: 5, message: "Tên ít nhất 5 ký tự" } 
             })} 
-            className={`form-control ${errors.name ? 'is-invalid' : ''}`} //
+            className={`form-control ${errors.name ? 'is-invalid' : ''}`}
           />
           {errors.name && <small className="text-danger">{errors.name.message}</small>} 
         </div>
 
         <div className="mb-3">
           <label className="form-label">Đường dẫn ảnh (URL)</label> 
-          <input {...register("image", { required: "Vui lòng nhập URL ảnh" })} className="form-control" /> {/* */}
+          <input 
+            {...register("image", { required: "Vui lòng nhập URL ảnh" })} 
+            className={`form-control ${errors.image ? 'is-invalid' : ''}`} // Thêm is-invalid
+          />
+          {/* HIỂN THỊ LỖI ẢNH */}
+          {errors.image && <small className="text-danger">{errors.image.message}</small>}
         </div>
 
         <div className="row">
           <div className="col-md-6 mb-3">
             <label className="form-label">Giá (VNĐ)</label>
-            <input type="number" {...register("price", { required: "Nhập giá", min: 0 })} className="form-control" /> {/* */}
+            <input 
+                type="number" 
+                {...register("price", { required: "Nhập giá", min: { value: 0, message: "Giá không được âm" } })} 
+                className={`form-control ${errors.price ? 'is-invalid' : ''}`} // Thêm is-invalid
+            />
+            {/* HIỂN THỊ LỖI GIÁ */}
+            {errors.price && <small className="text-danger">{errors.price.message}</small>}
           </div>
           <div className="col-md-6 mb-3">
             <label className="form-label">Danh mục</label> 
-            <select {...register("category", { required: "Chọn danh mục" })} className="form-select"> {/* */}
+            <select 
+                {...register("category", { required: "Chọn danh mục" })} 
+                className={`form-select ${errors.category ? 'is-invalid' : ''}`} // Thêm is-invalid
+            >
               <option value="">-- Chọn --</option>
               <option value="Áo">Áo</option>
               <option value="Quần">Quần</option>
               <option value="Giày">Giày</option>
               <option value="Phụ kiện">Phụ kiện</option>
             </select>
+            {/* HIỂN THỊ LỖI DANH MỤC */}
+            {errors.category && <small className="text-danger">{errors.category.message}</small>}
           </div>
         </div>
 
         <div className="mb-3">
           <label className="form-label d-block">Trạng thái</label> 
           <div className="form-check form-check-inline">
-            <input {...register("status")} className="form-check-input" type="radio" value="Hoạt động" defaultChecked /> {/* */}
+            <input {...register("status")} className="form-check-input" type="radio" value="Hoạt động" defaultChecked />
             <label className="form-check-label">Hoạt động</label>
           </div>
           <div className="form-check form-check-inline">
-            <input {...register("status")} className="form-check-input" type="radio" value="Không hoạt động" /> {/* */}
+            <input {...register("status")} className="form-check-input" type="radio" value="Không hoạt động" />
             <label className="form-check-label">Không hoạt động</label>
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary px-4">Lưu lại</button> {/* */}
+        <button type="submit" className="btn btn-primary px-4">Lưu lại</button>
         <button type="button" className="btn btn-secondary px-4 ms-2" onClick={() => navigate("/products")}>Hủy</button>
       </form>
     </div>

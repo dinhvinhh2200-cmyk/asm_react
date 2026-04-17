@@ -14,24 +14,35 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      // 1. Gọi API lấy danh sách user khớp với username và password
+      // 1. Gọi API lấy danh sách user khớp với username
+      // Lưu ý: Nên chỉ tìm theo username để kiểm tra chính xác lỗi do tên hay do mật khẩu
       const res = await axios.get(
-        `http://localhost:3000/users?username=${data.username}&password=${data.password}`,
+        `http://localhost:3000/users?username=${data.username}`
       );
 
-      // 2. Vì json-server trả về mảng, ta lấy phần tử đầu tiên
       const user = res.data[0];
 
-      if (user) {
-        localStorage.setItem("user", JSON.stringify(user));
-
-        // Thêm logic kiểm tra role ở đây:
-        if (user.role === "admin") {
-          navigate("/admin/dashboard"); // Admin thì vào Dashboard
-        } else {
-          navigate("/admin/products"); // Tài khoản khác (employee) thì vào Sản phẩm luôn
-        }
+      // 2. Kiểm tra nếu không tìm thấy username
+      if (!user) {
+        setError("username", { type: "manual", message: "Tên đăng nhập không đúng" });
+        return;
       }
+
+      // 3. Nếu có username, kiểm tra tiếp mật khẩu
+      if (user.password !== data.password) {
+        setError("password", { type: "manual", message: "Mật khẩu không đúng" });
+        return;
+      }
+
+      // 4. Nếu mọi thứ đúng, tiến hành đăng nhập
+      localStorage.setItem("user", JSON.stringify(user));
+
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/admin/products");
+      }
+      
     } catch (error) {
       console.error(error);
       alert("Không thể kết nối đến server (Hãy chắc chắn đã chạy json-server)");
