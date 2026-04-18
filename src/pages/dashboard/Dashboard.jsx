@@ -22,11 +22,11 @@ const Dashboard = () => {
         const orders = resOrders.data;
         const customers = resCustomers.data;
 
-        // === QUAN TRỌNG: Lọc bỏ đơn hàng có trạng thái "Hủy đơn" ===
-        const validOrders = orders.filter(order => order.status !== "Hủy đơn");
+        // === Lọc bỏ đơn hàng hủy để tính doanh thu và sản phẩm ===
+        const nonCancelledOrders = orders.filter(order => order.status !== "Hủy đơn");
         
-        // Chỉ tính doanh thu từ đơn hàng hợp lệ (không hủy) VÀ đã thanh toán
-        const paidOrders = validOrders.filter(order => order.paymentStatus === "Đã thanh toán");
+        // Chỉ tính doanh thu từ đơn hàng không bị hủy VÀ đã thanh toán
+        const paidOrders = nonCancelledOrders.filter(order => order.paymentStatus === "Đã thanh toán");
         
         // 1. Tính tổng doanh thu và tổng số lượng sản phẩm đã bán
         let totalSoldQuantity = 0;
@@ -47,12 +47,12 @@ const Dashboard = () => {
 
         setStats({
           products: totalSoldQuantity,
-          orders: validOrders.length,  // CHỈ ĐẾM ĐƠN HÀNG KHÔNG BỊ HỦY
+          orders: orders.length,  // TỔNG SỐ ĐƠN HÀNG (BAO GỒM CẢ ĐƠN BỊ HỦY)
           customers: customers.length,
           totalRevenue: totalRev
         });
 
-        // 2. Biểu đồ doanh thu (chỉ từ đơn hàng hợp lệ và đã thanh toán)
+        // 2. Biểu đồ doanh thu (chỉ từ đơn hàng không bị hủy và đã thanh toán)
         const dailyRevenue = {};
         paidOrders.forEach(order => {
           const date = order.createdDate || "Không xác định"; 
@@ -66,7 +66,7 @@ const Dashboard = () => {
         })).sort((a, b) => new Date(a.date) - new Date(b.date));
         setRevenueData(formattedRevenue);
 
-        // 3. Xử lý sản phẩm bán chạy (chỉ từ đơn hàng hợp lệ và đã thanh toán)
+        // 3. Xử lý sản phẩm bán chạy (chỉ từ đơn hàng không bị hủy và đã thanh toán)
         const productSales = {};
         paidOrders.forEach(order => {
           if (order.products) {

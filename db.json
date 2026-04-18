@@ -114,7 +114,7 @@
       "createdDate": "2026-04-17",
       "totalPrice": 600000,
       "status": "Đang vận chuyển",
-      "paymentStatus": "Chưa thanh toán",
+      "paymentStatus": "Đã thanh toán",
       "products": [
         {
           "id": "COQb4qK",
